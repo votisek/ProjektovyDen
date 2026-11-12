@@ -38,7 +38,7 @@ export const editBlockSchema = z
 export type editBlockSchema = z.infer<typeof editBlockSchema>;
 
 export const getBlockName = (block: { from: Date; to: Date }) => {
-	if (block.from.getDate() === block.to.getDate()) return `${printDate(block.from)}, ${printTime(block.from)} - ${printTime(block.to)}`;
+	if (printDate(block.from) === printDate(block.to)) return `${printDate(block.from)}, ${printTime(block.from)} - ${printTime(block.to)}`;
 
 	return `${printDateTime(block.from)} - ${printDateTime(block.to)}`;
 };
