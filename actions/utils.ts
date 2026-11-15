@@ -94,8 +94,12 @@ export const generateAttendances = async () => {
 
             const events = eventsByArchetype.get(claim.archetype)!;
 
-            // Implement round-robin
-            const chosenEvent = events[0];
+            // Při více přednáškách stejného typu v bloku se volí ta nejméně naplněná
+            const chosenEvent = events.reduce((acc, event) =>
+                eventPercentage.get(event.id)! < eventPercentage.get(acc.id)!
+                    ? event
+                    : acc,
+            );
 
             attendances.push({
                 user: claim.user,

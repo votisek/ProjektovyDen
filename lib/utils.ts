@@ -4,6 +4,7 @@ import { twMerge } from "tailwind-merge";
 import { UserErrorType } from "./utilityTypes";
 import { ZodError } from "zod";
 import { format } from "date-fns";
+import { tz } from "@date-fns/tz";
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -43,11 +44,14 @@ export const catchUserError = <T>(data: UserErrorType | T): [T, null] | [null, U
 export const pluralHelper = (count: number, singular: string, TwoToFile: string, Many: string | null = null) =>
 	count === 1 ? singular : (count >= 2 && count <= 4) || !Many ? TwoToFile : Many;
 
-export const printDate = (date: Date) => format(date, "d. M. yyyy");
+// Časy se vždy zobrazují v českém čase, nezávisle na časovém pásmu serveru
+const timeZone = tz("Europe/Prague");
 
-export const printTime = (date: Date) => format(date, "H:mm");
+export const printDate = (date: Date) => format(date, "d. M. yyyy", { in: timeZone });
 
-export const printDateTime = (date: Date) => format(date, "d. M. yyyy H:mm");
+export const printTime = (date: Date) => format(date, "H:mm", { in: timeZone });
+
+export const printDateTime = (date: Date) => format(date, "d. M. yyyy H:mm", { in: timeZone });
 
 export function createMapById<T, K extends keyof T>(data: T[], idKey: K): Map<T[K], T>;
 
